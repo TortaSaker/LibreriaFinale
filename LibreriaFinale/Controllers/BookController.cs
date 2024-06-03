@@ -3,13 +3,7 @@ using LibreriaFinale.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Http;
 using LibreriaFinale.Database;
-using LibreriaFinale.Model;
-
 namespace LibreriaFinale.Controllers
 {
     [Route("api/[controller]")]
