@@ -32,13 +32,13 @@ namespace LibreriaFinale.Controllers
         public ActionResult<IEnumerable<LibroDTO>> GetLibri()
         {
             _logger.LogInformation("Get libri nella libreria");
-            var listaLibri = _db.SetLibri;
+            var listaLibri = _db.Scaffale;
             if (listaLibri == null || !listaLibri.Any())
             {
                 return NoContent();
             }
 
-            return Ok(_db.SetLibri.ToList());
+            return Ok(_db.Scaffale.ToList());
         }
 
         [HttpPost]
@@ -51,7 +51,7 @@ namespace LibreriaFinale.Controllers
                 return BadRequest();
             }
 
-            Libro model = new()
+            Libro model = new() 
             {
                 ISBN = librodto.ISBN,
                 Autore = librodto.Autore,
@@ -60,7 +60,7 @@ namespace LibreriaFinale.Controllers
                 Anno = librodto.Anno
             };
 
-            _db.SetLibri.Add(model);
+            _db.Scaffale.Add(model);
             _db.SaveChanges();
 
             return CreatedAtAction(nameof(GetLibro), new { titolo = librodto.Titolo }, librodto);
@@ -73,9 +73,9 @@ namespace LibreriaFinale.Controllers
         public IActionResult DeleteBiblioteca(string isbn)
         {
             if (isbn.Length != 10 && isbn.Length != 13) return BadRequest();
-            var libro = _db.SetLibri.FirstOrDefault(l => l.ISBN == isbn);
+            var libro = _db.Scaffale.FirstOrDefault(l => l.ISBN == isbn);
             if (libro == null) return NotFound();
-            _db.SetLibri.Remove(libro);
+            _db.Scaffale    .Remove(libro);
             return CreatedAtAction(nameof(GetLibri), new { }, libro);
         }
 
@@ -90,7 +90,7 @@ namespace LibreriaFinale.Controllers
                 _logger.LogError("Get libro error with titolo " + titolo);
                 return BadRequest();
             }
-            var libro = _db.SetLibri.FirstOrDefault(l => l.Titolo.ToLower().Equals(titolo.ToLower()));
+            var libro = _db.Scaffale.FirstOrDefault(l => l.Titolo.ToLower().Equals(titolo.ToLower()));
             if (libro == null) return NotFound();
             return Ok(libro);
         }
@@ -100,9 +100,9 @@ namespace LibreriaFinale.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public IActionResult UpdatePartialScaffale(string isbn, JsonPatchDocument<LibroDTO> patchDTO)
         {
-            if (patchDTO == null || !_db.SetLibri.Any(l => l.ISBN.Equals(isbn))) return BadRequest();
+            if (patchDTO == null || !_db.Scaffale.Any(l => l.ISBN.Equals(isbn))) return BadRequest();
 
-            var libro = _db.SetLibri.AsNoTracking().FirstOrDefault(l => l.ISBN == isbn);
+            var libro = _db.Scaffale.AsNoTracking().FirstOrDefault(l => l.ISBN == isbn);
             if (libro == null) return NotFound();
 
             LibroDTO libroDTO = new LibroDTO()
@@ -125,7 +125,7 @@ namespace LibreriaFinale.Controllers
                 Anno = libroDTO.Anno
             };
 
-            _db.SetLibri.Update(model);
+            _db.Scaffale.Update(model);
             _db.SaveChanges();
 
             if (!ModelState.IsValid) return BadRequest(ModelState);

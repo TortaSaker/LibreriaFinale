@@ -5,7 +5,7 @@ namespace LibreriaFinale.Database
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
-        public DbSet<Libro> SetLibri { get; set; }
+        public DbSet<Libro> Scaffale { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
